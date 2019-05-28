@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-// Block represents a block in the blockchain
 type Block struct {
 	Timestamp     int64          //时间戳
 	Transactions  []*Transaction //区块中的交易链表
@@ -35,7 +34,6 @@ func NewGenesisBlock(coinbase *Transaction) *Block {
 	return NewBlock([]*Transaction{coinbase}, []byte{}, 0)
 }
 
-// HashTransactions returns a hash of the transactions in the block
 func (b *Block) HashTransactions() []byte {
 	var transactions [][]byte
 

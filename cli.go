@@ -15,14 +15,14 @@ type CLI struct{}
 // 输出提示，CLI的一个方法
 func (cli *CLI) printUsage() {
 	fmt.Println("Usage:")
-	fmt.Println("  createblockchain -address ADDRESS - Create a blockchain and send genesis block reward to ADDRESS")
-	fmt.Println("  createwallet - Generates a new key-pair and saves it into the wallet file")
-	fmt.Println("  getbalance -address ADDRESS - Get balance of ADDRESS")
-	fmt.Println("  listaddresses - Lists all addresses from the wallet file")
-	fmt.Println("  printchain - Print all the blocks of the blockchain")
-	fmt.Println("  reindexutxo - Rebuilds the UTXO set")
-	fmt.Println("  send -from FROM -to TO -amount AMOUNT -mine - Send AMOUNT of coins from FROM address to TO. Mine on the same node, when -mine is set.")
-	fmt.Println("  startnode -miner ADDRESS - Start a node with ID specified in NODE_ID env. var. -miner enables mining")
+	fmt.Println("  createblockchain -address ADDRESS - 创建一个区块链")
+	fmt.Println("  createaddress - 生成一个新地址")
+	fmt.Println("  getbalance -address ADDRESS - 获取地址的余额")
+	fmt.Println("  listaddresses - 列出所有地址")
+	fmt.Println("  printchain - 打印区块链")
+	//fmt.Println("  reindexutxo - Rebuilds the UTXO set")
+	fmt.Println("  send -from FROM -to TO -amount AMOUNT -mine - 交易数据")
+	fmt.Println("  startnode -miner ADDRESS - 开始节点")
 }
 
 // CLI的一个方法，参数是否有效
@@ -45,7 +45,7 @@ func (cli *CLI) Run() {
 
 	getBalanceCmd := flag.NewFlagSet("getbalance", flag.ExitOnError)
 	createBlockchainCmd := flag.NewFlagSet("createblockchain", flag.ExitOnError)
-	createWalletCmd := flag.NewFlagSet("createwallet", flag.ExitOnError)
+	createWalletCmd := flag.NewFlagSet("createaddress", flag.ExitOnError)
 	listAddressesCmd := flag.NewFlagSet("listaddresses", flag.ExitOnError)
 	printChainCmd := flag.NewFlagSet("printchain", flag.ExitOnError)
 	reindexUTXOCmd := flag.NewFlagSet("reindexutxo", flag.ExitOnError)
@@ -71,7 +71,7 @@ func (cli *CLI) Run() {
 		if err != nil {
 			log.Panic(err)
 		}
-	case "createwallet":
+	case "createaddress":
 		err := createWalletCmd.Parse(os.Args[2:])
 		if err != nil {
 			log.Panic(err)
