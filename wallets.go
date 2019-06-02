@@ -87,7 +87,7 @@ func (ws Wallets) SaveToFile(nodeID string) {
 	if err != nil {
 		log.Panic(err)
 	}
-
+	//存储地址到文件
 	err = ioutil.WriteFile(walletFile, content.Bytes(), 0644)
 	if err != nil {
 		log.Panic(err)

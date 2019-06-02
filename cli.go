@@ -4,11 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"log"
-
 	"os"
 )
 
-// CLI responsible for processing command line arguments
 // CLI 是提供给终端的接口
 type CLI struct{}
 
@@ -37,9 +35,9 @@ func (cli *CLI) validateArgs() {
 func (cli *CLI) Run() {
 	cli.validateArgs()
 
-	nodeID := os.Getenv("NODE_ID")
+	nodeID := os.Getenv("NODE")
 	if nodeID == "" {
-		fmt.Printf("NODE_ID env. var is not set!")
+		fmt.Printf("未设置端口号！")
 		os.Exit(1)
 	}
 
@@ -148,7 +146,7 @@ func (cli *CLI) Run() {
 	}
 
 	if startNodeCmd.Parsed() {
-		nodeID := os.Getenv("NODE_ID")
+		nodeID := os.Getenv("NODE")
 		if nodeID == "" {
 			startNodeCmd.Usage()
 			os.Exit(1)

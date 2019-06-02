@@ -113,7 +113,7 @@ func sendBlock(addr string, b *Block) {
 func sendData(addr string, data []byte) {
 	conn, err := net.Dial(protocol, addr)
 	if err != nil {
-		fmt.Printf("%s is not available\n", addr)
+		fmt.Printf("%s 地址不可用\n", addr)
 		var updatedNodes []string
 
 		for _, node := range knownNodes {
@@ -203,10 +203,10 @@ func handleBlock(request []byte, bc *Blockchain) {
 	blockData := payload.Block
 	block := DeserializeBlock(blockData)
 
-	fmt.Println("Recevied a new block!")
+	fmt.Println("收到一个新的区块\n")
 	bc.AddBlock(block)
 
-	fmt.Printf("Added block %x\n", block.Hash)
+	fmt.Printf("添加区块，区块Hash：%x\n", block.Hash)
 
 	if len(blocksInTransit) > 0 {
 		blockHash := blocksInTransit[0]
@@ -230,7 +230,7 @@ func handleInv(request []byte, bc *Blockchain) {
 		log.Panic(err)
 	}
 
-	fmt.Printf("Recevied inventory with %d %s\n", len(payload.Items), payload.Type)
+	fmt.Printf("收到数据： 数据长度:%d | 数据类型:%s\n", len(payload.Items), payload.Type)
 
 	if payload.Type == "block" {
 		blocksInTransit = payload.Items
@@ -249,9 +249,10 @@ func handleInv(request []byte, bc *Blockchain) {
 
 	if payload.Type == "tx" {
 		txID := payload.Items[0]
-
 		if mempool[hex.EncodeToString(txID)].ID == nil {
 			sendGetData(payload.AddrFrom, "tx", txID)
+		} else {
+			fmt.Printf("重复的交易\n")
 		}
 	}
 }
@@ -334,7 +335,7 @@ func handleTx(request []byte, bc *Blockchain) {
 			}
 
 			if len(txs) == 0 {
-				fmt.Println("All transactions are invalid! Waiting for new ones...")
+				fmt.Println("交易均无效！")
 				return
 			}
 
@@ -345,7 +346,7 @@ func handleTx(request []byte, bc *Blockchain) {
 			UTXOSet := UTXOSet{bc}
 			UTXOSet.Reindex()
 
-			fmt.Println("New block is mined!")
+			fmt.Println("新的区块产生!")
 
 			for _, tx := range txs {
 				txID := hex.EncodeToString(tx.ID)
@@ -397,7 +398,8 @@ func handleConnection(conn net.Conn, bc *Blockchain) {
 		log.Panic(err)
 	}
 	command := bytesToCommand(request[:commandLength])
-	fmt.Printf("Received %s command\n", command)
+	fmt.Printf("接收到请求：%s \n", command)
+	//fmt.Printf("接收到请求\n", command)
 
 	switch command {
 	case "addr":
@@ -415,7 +417,7 @@ func handleConnection(conn net.Conn, bc *Blockchain) {
 	case "version":
 		handleVersion(request, bc)
 	default:
-		fmt.Println("Unknown command!")
+		fmt.Println("命令错误!")
 	}
 
 	conn.Close()

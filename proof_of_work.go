@@ -53,7 +53,7 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 	for nonce < maxNonce {
 		data := pow.prepareData(nonce)
 		hash = sha256.Sum256(data)
-		fmt.Printf("工作量证明,随机数值:%d 当前Hash值：%x\n", nonce, hash)
+		fmt.Printf("\r工作量证明,随机数值:%d 当前Hash值：%x", nonce, hash)
 		hashInt.SetBytes(hash[:])
 
 		if hashInt.Cmp(pow.target) == -1 {
